@@ -7,6 +7,7 @@
 package com.dreikraft.otel.javaagent.instrumentation.springstereotypes;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
 
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
@@ -28,8 +29,8 @@ public class SpringStereotypeInstrumentation implements TypeInstrumentation {
 
   @Override
   public ElementMatcher<TypeDescription> typeMatcher() {
-    return ElementMatchers.isAnnotatedWith(named("org.springframework.stereotype.Service"))
-        .or(ElementMatchers.isAnnotatedWith(named("org.springframework.stereotype.Component")));
+    return ElementMatchers.inheritsAnnotation(hasSuperType(named("org.springframework.stereotype.Service")))
+        .or(ElementMatchers.inheritsAnnotation(hasSuperType(named("org.springframework.stereotype.Component"))));
   }
 
   @Override
